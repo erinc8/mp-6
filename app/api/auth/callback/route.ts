@@ -1,19 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
-    const {searchParams} = new URL(req.url);
+    const { searchParams } = new URL(req.url);
     const code = searchParams.get('code');
-
 
     if (!code) {
         return NextResponse.redirect(new URL('/', req.url));
     }
 
-    // Only Google OAuth token exchange
+    // Exchange code for tokens
     const tokenEndpoint = 'https://oauth2.googleapis.com/token';
     const payload = new URLSearchParams({
         code,
-        client_id: process.env.GOOGLE_CLIENT_ID!,
+        client_id: process.env.GOOGLE_CLIENT_ID!, // Make sure this is set in your .env.local!
         client_secret: process.env.GOOGLE_CLIENT_SECRET!,
         redirect_uri: process.env.REDIRECT_URI!,
         grant_type: 'authorization_code',
@@ -46,8 +45,23 @@ export async function GET(req: NextRequest) {
 
     const user = await userRes.json();
 
-    // Set user cookie
-    const response = NextResponse.redirect(new URL('/profile', req.url));
+    // Set user cookie and return HTML for client-side redirect
+    const html = `
+      <html>
+        <head>
+          <meta http-equiv="refresh" content="0; url=/profile" />
+          <script>window.location.href = "/profile";</script>
+        </head>
+        <body>Redirecting...</body>
+      </html>
+    `;
+
+    const response = new NextResponse(html, {
+        status: 200,
+        headers: { 'Content-Type': 'text/html' }
+    });
+
+    // Set the cookie with all recommended options
     response.cookies.set({
         name: 'user',
         value: JSON.stringify({
@@ -60,7 +74,8 @@ export async function GET(req: NextRequest) {
         secure: process.env.NODE_ENV === 'production',
         maxAge: 3600,
         path: '/',
-        sameSite: 'lax',
+        sameSite: 'lax', // CRITICAL for OAuth flows!
     });
+
     return response;
 }
