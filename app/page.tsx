@@ -5,7 +5,7 @@ export default function Home() {
         <main className="min-h-screen flex flex-col items-center justify-center">
             <h1 className="text-4xl font-bold mb-8">OAuth Demo</h1>
             <div className="space-y-4">
-                <OAuthButton /> {/* Remove provider prop */}
+                <OAuthButton />
             </div>
         </main>
     );

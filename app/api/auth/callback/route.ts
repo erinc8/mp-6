@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
-    const { searchParams } = new URL(req.url);
+    const {searchParams} = new URL(req.url);
     const code = searchParams.get('code');
-    // No more provider parameter
+
 
     if (!code) {
         return NextResponse.redirect(new URL('/', req.url));
@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
         secure: process.env.NODE_ENV === 'production',
         maxAge: 3600,
         path: '/',
+        sameSite: 'lax',
     });
-
     return response;
 }
