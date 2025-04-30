@@ -7,8 +7,8 @@ export function OAuthButton() {
         const baseUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
 
         const params = new URLSearchParams({
-            client_id: process.env.GOOGLE_CLIENT_ID!,
-            redirect_uri: process.env.REDIRECT_URI!,
+            client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+            redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI!,
             scope: 'email profile',
             response_type: 'code',
             state: crypto.randomUUID(),

@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
     const tokenEndpoint = 'https://oauth2.googleapis.com/token';
     const payload = new URLSearchParams({
         code,
-        client_id: process.env.GOOGLE_CLIENT_ID!, // Make sure this is set in your .env.local!
+        client_id: process.env.GOOGLE_CLIENT_ID!,
         client_secret: process.env.GOOGLE_CLIENT_SECRET!,
         redirect_uri: process.env.REDIRECT_URI!,
         grant_type: 'authorization_code',
@@ -74,7 +74,7 @@ export async function GET(req: NextRequest) {
         secure: process.env.NODE_ENV === 'production',
         maxAge: 3600,
         path: '/',
-        sameSite: 'lax', // CRITICAL for OAuth flows!
+        sameSite: 'lax',
     });
 
     return response;
