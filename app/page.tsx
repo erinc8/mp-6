@@ -1,4 +1,4 @@
-import { OAuthButton } from '@/components/OAuthButton';
+import { OAuthButton } from '@/components/oauthbutton';
 
 export default function Home() {
     return (
