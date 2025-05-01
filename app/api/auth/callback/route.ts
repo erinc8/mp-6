@@ -46,36 +46,47 @@ export async function GET(req: NextRequest) {
 
     const user = await userRes.json();
 
+    // Create the user data
+    const userData = JSON.stringify({
+        name: user.name,
+        email: user.email,
+        picture: user.picture,
+        provider: 'google'
+    });
+
     // Set user cookie and return HTML for client-side redirect
     const html = `
       <html>
         <head>
           <meta http-equiv="refresh" content="0; url=/profile" />
-          <script>window.location.href = "/profile";</script>
+          <script>
+            // Set a client-side cookie as backup (less secure but helps with cookie issues)
+            document.cookie = "user_backup=${encodeURIComponent(userData)}; path=/; max-age=3600";
+            window.location.href = "/profile";
+          </script>
         </head>
         <body>Redirecting...</body>
       </html>
     `;
 
+    // Create response with proper headers
     const response = new NextResponse(html, {
         status: 200,
-        headers: { 'Content-Type': 'text/html' }
+        headers: {
+            'Content-Type': 'text/html',
+            'Cache-Control': 'no-store',
+        }
     });
 
-    // Set the cookie with all recommended options
+
     response.cookies.set({
         name: 'user',
-        value: JSON.stringify({
-            name: user.name,
-            email: user.email,
-            picture: user.picture,
-            provider: 'google'
-        }),
+        value: userData,
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: true,
         maxAge: 3600,
         path: '/',
-        sameSite: 'lax',
+        sameSite: 'none',
     });
 
     return response;
