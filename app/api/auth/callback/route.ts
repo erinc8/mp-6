@@ -13,9 +13,9 @@ export async function GET(req: NextRequest) {
     const tokenEndpoint = 'https://oauth2.googleapis.com/token';
     const payload = new URLSearchParams({
         code,
-        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+        client_id: process.env.GOOGLE_CLIENT_ID!,
         client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-        redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI!,
+        redirect_uri: process.env.REDIRECT_URI!,
         grant_type: 'authorization_code',
     });
 
@@ -78,15 +78,15 @@ export async function GET(req: NextRequest) {
         }
     });
 
-
+    // Set the cookie with more permissive cross-site settings
     response.cookies.set({
         name: 'user',
         value: userData,
         httpOnly: true,
-        secure: true,
+        secure: true, // Always use secure on Vercel
         maxAge: 3600,
         path: '/',
-        sameSite: 'none',
+        sameSite: 'none', // Changed from 'lax' to 'none' for cross-site OAuth flow
     });
 
     return response;
