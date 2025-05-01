@@ -34,13 +34,8 @@ export default async function Profile() {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center">
             <h1 className="text-3xl font-bold mb-4">Name:  {user.name || 'User'}</h1>
-            {user.picture && (
-                <img
-                    src={user.picture}
-                    alt={`Profile picture of ${user.name || 'user'}`}
-                    className="w-32 h-32 rounded-full mb-4"
-                />
-            )}
+
+
             <p className="mb-2">Email: {user.email || 'Unknown'}</p>
             {user.provider && (
                 <p className="text-gray-500">Connected via {user.provider}</p>
