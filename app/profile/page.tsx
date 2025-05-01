@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import { unstable_noStore } from 'next/cache';
 import Image from 'next/image';
+import Link from 'next/link'; // Add this import
 import { ClientBackupCheck } from './client-components';
 
 type User = {
@@ -33,7 +34,7 @@ export default async function Profile() {
                     <h2 className="text-2xl font-bold mb-4">Not authenticated</h2>
                     <p>Please sign in to view your profile.</p>
                     <p className="mt-4 text-sm">
-                        <a href="/" className="text-blue-500 hover:underline">Return to sign in</a>
+                        <Link href="/" className="text-blue-500 hover:underline">Return to sign in</Link>
                     </p>
                     {/* Client component to check for backup cookie */}
                     <ClientBackupCheck />
